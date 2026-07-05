@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { API_BASE_URL } from '../utils/config';
 
 const PropertyDetails = () => {
     const { id } = useParams();
@@ -29,7 +30,7 @@ const PropertyDetails = () => {
     }, [id]);
 
     const fetchProperty = () => {
-        axios.get(`http://localhost:5000/api/properties/${id}`)
+        axios.get(`${API_BASE_URL}/api/properties/${id}`)
             .then(res => {
                 setProperty(res.data);
                 setMainImage(res.data.thumbnail);
@@ -59,7 +60,7 @@ const PropertyDetails = () => {
         // 2 seconds ka dummy natak taaki asli jaisa feel aaye
         setTimeout(async () => {
             try {
-                const verifyRes = await axios.post('http://localhost:5000/api/bookings/verify-payment', {
+                const verifyRes = await axios.post(`${API_BASE_URL}/api/bookings/verify-payment`, {
                     property_id: property._id,
                     tenant_id: user._id,
                     check_in_date: checkIn,
@@ -81,7 +82,7 @@ const PropertyDetails = () => {
         e.preventDefault();
         if (!user) return navigate('/login');
         try {
-            await axios.post(`http://localhost:5000/api/properties/${id}/reviews`, { rating, comment, user_id: user._id, user_name: user.name });
+            await axios.post(`${API_BASE_URL}/api/properties/${id}/reviews`, { rating, comment, user_id: user._id, user_name: user.name });
             alert('Aapka review add ho gaya! 🌟');
             setComment('');
             fetchProperty();
@@ -138,12 +139,12 @@ const PropertyDetails = () => {
 
                 <div className="md:w-1/2 p-4 flex flex-col">
                     {mainImage && (
-                        <img src={`http://localhost:5000${mainImage}`} alt="Main" className="w-full h-80 object-cover rounded-lg shadow-sm mb-4 bg-casa-slate/20 transition-all duration-300 ease-in-out" />
+                        <img src={`${API_BASE_URL}${mainImage}`} alt="Main" className="w-full h-80 object-cover rounded-lg shadow-sm mb-4 bg-casa-slate/20 transition-all duration-300 ease-in-out" />
                     )}
                     {galleryImages && galleryImages.length > 0 && (
                         <div className="grid grid-cols-4 gap-2">
                             {galleryImages.map((img, index) => (
-                                <img key={index} src={`http://localhost:5000${img}`} alt="Gallery" onClick={() => handleImageSwap(index)} className="w-full h-20 object-cover rounded shadow-sm hover:opacity-75 hover:scale-105 transition-all duration-200 cursor-pointer bg-casa-slate/20 border-2 border-transparent hover:border-casa-red" />
+                                <img key={index} src={`${API_BASE_URL}${img}`} alt="Gallery" onClick={() => handleImageSwap(index)} className="w-full h-20 object-cover rounded shadow-sm hover:opacity-75 hover:scale-105 transition-all duration-200 cursor-pointer bg-casa-slate/20 border-2 border-transparent hover:border-casa-red" />
                             ))}
                         </div>
                     )}

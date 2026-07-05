@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { API_BASE_URL } from '../utils/config';
 
 const AddProperty = () => {
     const { user } = useAuth();
@@ -67,7 +68,7 @@ const AddProperty = () => {
             }
 
             // Headers me hum backend ko batate hain ki hum file bhej rahe hain (multipart/form-data)
-            await axios.post('http://localhost:5000/api/properties/add', data, {
+            await axios.post(`${API_BASE_URL}/api/properties/add`, data, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
@@ -114,7 +115,7 @@ const AddProperty = () => {
                                 onClick={async () => {
                                     if(!formData.title) return alert("Pehle thoda title toh likho bhai!");
                                     try {
-                                        const res = await axios.post('http://localhost:5000/api/ai/generate-description', {
+                                        const res = await axios.post(`${API_BASE_URL}/api/ai/generate-description`, {
                                             title: formData.title,
                                             price: formData.price,
                                             location: formData.location,

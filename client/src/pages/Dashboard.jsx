@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { API_BASE_URL } from '../utils/config';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
@@ -19,12 +20,12 @@ const Dashboard = () => {
         const fetchBookings = async () => {
             try {
                 // Har user (chahe Tenant ho ya Owner) apni khud ki ki gayi bookings dekh sakta hai
-                const myRes = await axios.get(`http://localhost:5000/api/bookings/tenant/${user._id}`);
+                const myRes = await axios.get(`${API_BASE_URL}/api/bookings/tenant/${user._id}`);
                 setMyBookings(myRes.data);
 
                 // Agar user Owner hai, toh use doosro dwara ki gayi bookings (Received) bhi dikhani hain
                 if (user.role === 'owner') {
-                    const recRes = await axios.get(`http://localhost:5000/api/bookings/owner/${user._id}`);
+                    const recRes = await axios.get(`${API_BASE_URL}/api/bookings/owner/${user._id}`);
                     setReceivedBookings(recRes.data);
                 }
             } catch (error) {
@@ -69,7 +70,7 @@ const Dashboard = () => {
 
                         <div className="md:w-2/5 h-48 md:h-auto bg-casa-light relative">
                             {booking.property_id && booking.property_id.thumbnail ? (
-                                <img src={`http://localhost:5000${booking.property_id.thumbnail}`} alt="Property" className="w-full h-full object-cover" />
+                                <img src={`${API_BASE_URL}${booking.property_id.thumbnail}`} alt="Property" className="w-full h-full object-cover" />
                             ) : (
                                 <div className="flex items-center justify-center h-full text-casa-slate italic">No Image</div>
                             )}

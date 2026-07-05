@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/SearchBar';
+import { API_BASE_URL } from '../utils/config';
 
 const Home = () => {
   const [properties, setProperties] = useState([]);
@@ -13,7 +14,7 @@ const Home = () => {
     // Convert object to query string (jaise ?location=Delhi&minPrice=5000)
     const queryString = new URLSearchParams(searchParams).toString();
     
-    axios.get(`http://localhost:5000/api/properties/all?${queryString}`)
+    axios.get(`${API_BASE_URL}/api/properties/all?${queryString}`)
       .then((response) => {
         setProperties(response.data);
         setLoading(false);
@@ -58,7 +59,7 @@ const Home = () => {
               <div className="h-56 bg-casa-slate/20 flex items-center justify-center relative overflow-hidden">
                 {property.thumbnail ? (
                   <img
-                    src={`http://localhost:5000${property.thumbnail}`}
+                    src={`${API_BASE_URL}${property.thumbnail}`}
                     alt={property.title}
                     className="w-full h-full object-cover"
                   />

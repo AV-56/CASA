@@ -1,5 +1,3 @@
-// Yahan hum decide kar rahe hain ki API kahan call karni hai
-// Agar Vite me VITE_API_URL set hai (jaise Render pe), toh wo use hoga
-// Warna by default localhost:5000 (local testing ke liye) use hoga
-
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+// Jab app production me hogi (Render par), tab ye automatically apne hi domain pe call karega ('')
+// Jab hum local PC par dev kar rahe honge, tab ye 'http://localhost:5000' use karega
+export const API_BASE_URL = import.meta.env.PROD ? '' : 'http://localhost:5000';

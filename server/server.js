@@ -23,10 +23,6 @@ app.use(express.json());
 
 connectDB();
 
-app.get('/', (req, res) => {
-    res.send("Bhai ka pehla server ekdum makkhan chal raha hai! 🔥");
-});
-
 app.use('/api/auth', authRoutes);
 app.use('/api/properties', propertyRoutes);
 app.use('/api/bookings', bookingRoutes);
@@ -42,6 +38,24 @@ app.use((err, req, res, next) => {
         res.status(400).json({ message: err.message });
     }
 });
+
+// 🚀 PRODUCTION DEPLOYMENT: Serve React Frontend from Express
+// Pehle check karte hain agar production me hai
+if (process.env.NODE_ENV === 'production') {
+    // 1. Vite ka build folder 'dist' ko public banate hain
+    app.use(express.static(path.join(__dirname, '../client/dist')));
+
+    // 2. Agar koi bhi request (jo API nahi hai) aaye, toh seedha index.html bhej do
+    // Isse React Router ki aapas ki link navigate ho payegi!
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, '../client', 'dist', 'index.html'));
+    });
+} else {
+    // Development mode ke liye default message
+    app.get('/', (req, res) => {
+        res.send("API is running...");
+    });
+}
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

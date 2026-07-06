@@ -46,8 +46,8 @@ if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../client/dist')));
 
     // 2. Agar koi bhi request (jo API nahi hai) aaye, toh seedha index.html bhej do
-    // Isse React Router ki aapas ki link navigate ho payegi!
-    app.get('*', (req, res) => {
+    // Isse React Router ki aapas ki link navigate ho payegi! (Express 5 fix: using regex /.*/)
+    app.get(/.*/, (req, res) => {
         res.sendFile(path.resolve(__dirname, '../client', 'dist', 'index.html'));
     });
 } else {
